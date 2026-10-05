@@ -1,16 +1,12 @@
 name: pokemon-restock-check
 
-# Runs every 10 minutes. GitHub's free tier gives you 2000 minutes/month
-# of Actions time on private repos (unlimited on public). Each run takes
-# roughly 1-2 minutes, so 10-minute cadence stays comfortably inside
-# the free tier on a public repo.
 on:
   schedule:
     - cron: "*/10 * * * *"
   workflow_dispatch: {}
 
 permissions:
-  contents: write   # needed to commit updated state.json
+  contents: write
 
 concurrency:
   group: pokemon-check
@@ -38,6 +34,13 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python check.py --config config.yaml --state state.json
 
+      - name: Debug - show saved state
+        run: |
+          echo "--- git status ---"
+          git status --porcelain
+          echo "--- state.json ---"
+          cat state.json
+
       - name: Commit updated state
         run: |
           if [[ -n "$(git status --porcelain state.json)" ]]; then
@@ -46,4 +49,6 @@ jobs:
             git add state.json
             git commit -m "update state $(date -u +%FT%TZ)"
             git push
+          else
+            echo "state.json unchanged - nothing to commit"
           fi
