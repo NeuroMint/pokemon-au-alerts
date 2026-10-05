@@ -15,11 +15,7 @@ keywords:
 # (case-insensitive). Leave empty to alert on every Pokemon product that
 # changes from out-of-stock to in-stock.
 watchlist:
-  - prismatic evolutions
-  - surging sparks
-  - destined rivals
-  - 151
-  - paldean fates
+  []
 
 # Per-store enable flags. Every enabled store below offers Click & Collect
 # or in-store pickup somewhere in Australia. Disable stores you don't care
